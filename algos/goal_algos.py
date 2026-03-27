@@ -3,7 +3,7 @@ import copy
 
 import torch
 import torch.nn as nn
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.nn.functional as F
 from models.goal import GoalPredictor
 import diffuser_utils.dataset_utils as DatasetUtils
@@ -26,7 +26,7 @@ class GoalPredictorModule(pl.LightningModule):
             clip_model,
             [data_batch["action_text"]],
             max_length=max_length,
-            device="cuda",
+            device=self.device,
         )
 
         action_tokens.to(self.device)
@@ -44,7 +44,7 @@ class GoalPredictorModule(pl.LightningModule):
             clip_model,
             verb_text,
             max_length=max_length,
-            device="cuda",
+            device=self.device,
         )
 
         verb_tokens.to(self.device)

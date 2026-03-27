@@ -1,9 +1,16 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_scatter import scatter_mean
 from functools import partial
 import math
+
+
+def scatter_mean(src, index, out=None, dim=-1):
+    """Drop-in replacement for torch_scatter.scatter_mean using built-in PyTorch ops."""
+    if out is not None:
+        out.scatter_reduce_(dim, index.expand_as(src), src, reduce="mean", include_self=False)
+        return out
+    return torch.zeros_like(src).scatter_reduce_(dim, index.expand_as(src), src, reduce="mean", include_self=False)
 
 # -----------------------------------------------------------------------------#
 # ---------------------------------- PosEnc -----------------------------------#

@@ -352,10 +352,7 @@ def to_numpy(x, ignore_if_unspecified=False):
     """
 
     def f(tensor):
-        if tensor.is_cuda:
-            return tensor.detach().cpu().numpy()
-        else:
-            return tensor.detach().numpy()
+        return tensor.detach().cpu().numpy()
 
     return recursive_dict_list_tuple_apply(
         x,
@@ -383,10 +380,7 @@ def to_list(x):
     """
 
     def f(tensor):
-        if tensor.is_cuda:
-            return tensor.detach().cpu().numpy().tolist()
-        else:
-            return tensor.detach().numpy().tolist()
+        return tensor.detach().cpu().numpy().tolist()
 
     return recursive_dict_list_tuple_apply(
         x,

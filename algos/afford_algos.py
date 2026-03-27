@@ -2,7 +2,7 @@ import sys
 import os
 import numpy as np
 import torch
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.nn.functional as F
 from algos.contact_algos import ContactPredictorModule
 from algos.goal_algos import GoalPredictorModule
@@ -17,6 +17,7 @@ from sklearn.mixture import GaussianMixture
 from scipy.signal import savgol_filter
 from transformations import rotation_matrix
 from copy import deepcopy
+from vidbot_utils.device import get_device
 sys.path.append("./third_party/EfficientSAM")
 sys.path.append("./third_party/GroundingDINO")
 sys.path.append("./third_party/graspness_unofficial")
@@ -106,10 +107,11 @@ class AffordanceInferenceEngine(pl.LightningModule):
             assert "traj" in self.nets, "Trajectory module must be loaded"
             self.nets["traj"].nets["policy"].set_guidance(self.traj_guidance)
 
+        self._device = get_device()
         if len(self.nets.keys()) > 0:
             for k, v in self.nets.items():
                 v.eval()
-                v.cuda()
+                v.to(self._device)
 
     @torch.no_grad()
     def encode_action(self, data_batch, clip_model, max_length=20):
@@ -129,6 +131,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
 
     @staticmethod
     def get_interaction_uvs(hmaps, thres=90, sample_nums=500):
+        _device = get_device()
         max_pix_uv_all, sample_uv_all = [], []
 
         for hmap in hmaps:
@@ -145,8 +148,8 @@ class AffordanceInferenceEngine(pl.LightningModule):
             sample_uv_all.append(sample_uv)
         max_pix_uv_all = np.stack(max_pix_uv_all, axis=0)
         sample_uv_all = np.stack(sample_uv_all, axis=0)
-        max_pix_uv_all = torch.from_numpy(max_pix_uv_all).float().cuda()
-        sample_uv_all = torch.from_numpy(sample_uv_all).float().cuda()
+        max_pix_uv_all = torch.from_numpy(max_pix_uv_all).float().to(_device)
+        sample_uv_all = torch.from_numpy(sample_uv_all).float().to(_device)
         return max_pix_uv_all, sample_uv_all
 
     @staticmethod
@@ -213,9 +216,9 @@ class AffordanceInferenceEngine(pl.LightningModule):
             if 'list' in key:
                 for i in range(len(grasp_data_in[key])):
                     for j in range(len(grasp_data_in[key][i])):
-                        grasp_data_in[key][i][j] = grasp_data_in[key][i][j].cuda()
+                        grasp_data_in[key][i][j] = grasp_data_in[key][i][j].to(self._device)
             else:
-                grasp_data_in[key] = grasp_data_in[key].cuda()
+                grasp_data_in[key] = grasp_data_in[key].to(self._device)
 
         end_points = self.nets["graspnet"](grasp_data_in)
         grasp_preds = pred_decode(end_points)
@@ -293,14 +296,14 @@ class AffordanceInferenceEngine(pl.LightningModule):
             if data_batch["normal_sign"] > 0:
                 object_top_normal *= -1
             batch_size = start_pos.shape[0]
-            grasp_poses_valid = torch.eye(4).cuda()[None]
+            grasp_poses_valid = torch.eye(4, device=self._device)[None]
             grasp_poses_valid = grasp_poses_valid.repeat(batch_size, 1, 1)
             grasp_poses_valid[:, :3, 3] = start_pos
             grasp_poses_valid[:, :3, 2] = object_top_normal
             grasp_poses_valid[:, :3, 1] = torch.cross(
-                object_top_normal, grasp_poses_valid[:, :3, 0]).cuda()
+                object_top_normal, grasp_poses_valid[:, :3, 0]).to(self._device)
             grasp_poses_valid[:, :3, 0] = torch.cross(
-                grasp_poses_valid[:, :3, 1], grasp_poses_valid[:, :3, 2]).cuda()
+                grasp_poses_valid[:, :3, 1], grasp_poses_valid[:, :3, 2]).to(self._device)
             grasp_poses_valid[:, :3, 3] = grasp_poses_valid[:, :3, 3] - \
                 0.11 * grasp_poses_valid[:, :3, 2]
             grasp_poses_valid = grasp_poses_valid[:, None]
@@ -308,7 +311,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
             grasp_poses_valid = np.stack(
                 grasp_poses_valid, axis=0)  # [G, 4, 4]
             grasp_poses_valid = torch.from_numpy(
-                grasp_poses_valid).cuda()[None].float()
+                grasp_poses_valid).to(self._device)[None].float()
         return grasp_poses_valid
 
     @torch.no_grad()
@@ -329,6 +332,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
             caption=text,
             box_threshold=box_thres,
             text_threshold=text_thres,
+            device=str(self._device),
         )
 
         h, w, _ = color_np.shape
@@ -409,8 +413,8 @@ class AffordanceInferenceEngine(pl.LightningModule):
                     torch.tensor(input_labels), (1, 1, -1))
                 predicted_logits, predicted_iou = self.nets["esam"](
                     data_batch["color_raw"],
-                    input_points.cuda().float(),
-                    input_labels.cuda().float(),
+                    input_points.to(self._device).float(),
+                    input_labels.to(self._device).float(),
                 )
                 sorted_ids = torch.argsort(
                     predicted_iou, dim=-1, descending=True)
@@ -543,7 +547,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
         }
         for k, v in detection_results.items():
             if isinstance(v, np.ndarray):
-                data_batch[k] = torch.from_numpy(v).unsqueeze(0).float().cuda()
+                data_batch[k] = torch.from_numpy(v).unsqueeze(0).float().to(self._device)
             else:
                 data_batch[k] = v
 
@@ -605,7 +609,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
             contact_pix = max_uv[:, None]
             contact_pix_sample = gm.sample(sample_num)[0]
             contact_pix_sample = (
-                torch.from_numpy(contact_pix_sample).float().cuda()[None]
+                torch.from_numpy(contact_pix_sample).float().to(self._device)[None]
             )
 
         contact_pix_sample = contact_pix_sample.long()
@@ -731,10 +735,10 @@ class AffordanceInferenceEngine(pl.LightningModule):
         )  # , enlarge_ratio=4)
 
         data_batch["gt_traj_min_bound"] = (
-            torch.tensor(min_bound).unsqueeze(0).cuda().float()
+            torch.tensor(min_bound).unsqueeze(0).to(self._device).float()
         )
         data_batch["gt_traj_max_bound"] = (
-            torch.tensor(max_bound).unsqueeze(0).cuda().float()
+            torch.tensor(max_bound).unsqueeze(0).to(self._device).float()
         )
 
         # Forward pass
@@ -837,7 +841,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
             normals_np_bi = normals_np_bi.reshape(height, width, 3).transpose(
                 2, 0, 1
             )  # [3, H, W]
-            normals.append(torch.from_numpy(normals_np_bi).float().cuda())
+            normals.append(torch.from_numpy(normals_np_bi).float().to(points.device))
         normals = torch.stack(normals, dim=0)  # [B, 3, H, W]
         v_index = torch.clamp(
             data_batch["contact_pix_samples_patch"][:, :, 1], 0, 256 - 1
@@ -918,10 +922,10 @@ class AffordanceInferenceEngine(pl.LightningModule):
                 covariance_type="diag",
                 init_params="k-means++",
             ).fit(sample_uvs)
-            goal_pix = torch.tensor(gm.means_).float().cuda()  # [B, 2]
+            goal_pix = torch.tensor(gm.means_).float().to(self._device)  # [B, 2]
             goal_pix_samples = gm.sample(sample_num)[0]
             goal_pix_samples = (
-                torch.from_numpy(goal_pix_samples).float().cuda()[None]
+                torch.from_numpy(goal_pix_samples).float().to(self._device)[None]
             )  # [B, 1000, 2]
 
         # goal_pix = goal_pix
@@ -996,18 +1000,18 @@ class AffordanceInferenceEngine(pl.LightningModule):
                 data_batch, num_point, voxel_size, collision_thresh)
             grasp_pose = grasp_poses_valid[:, 0]
         else:
-            grasp_pose = torch.eye(4).cuda()[None]
+            grasp_pose = torch.eye(4, device=self._device)[None]
             grasp_pose = grasp_pose.repeat(batch_size, 1, 1)
             grasp_pose[:, :3, 3] = start_pos
             grasp_pose[:, :3, 2] = object_top_normal
             grasp_pose[:, :3, 1] = torch.cross(
-                object_top_normal, grasp_pose[:, :3, 0]).cuda()
+                object_top_normal, grasp_pose[:, :3, 0]).to(self._device)
             grasp_pose[:, :3, 0] = torch.cross(
-                grasp_pose[:, :3, 1], grasp_pose[:, :3, 2]).cuda()
+                grasp_pose[:, :3, 1], grasp_pose[:, :3, 2]).to(self._device)
             grasp_pose[:, :3, 3] = grasp_pose[:, :3, 3] - \
                 0.11 * grasp_pose[:, :3, 2]
         gripper_points_in_contact = data_batch["gripper_points"].clone()[
-            None].cuda().float()
+            None].to(self._device).float()
         gripper_points_in_contact = gripper_points_in_contact.repeat(
             batch_size, 1, 1)
         gripper_points_in_contact = gripper_points_in_contact @ grasp_pose[:, :3, :3].transpose(-1, -2) \
@@ -1150,7 +1154,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
             #     skip_keys.append(k)
 
             elif isinstance(v, np.ndarray) and k not in skip_keys:
-                data_batch[k] = torch.from_numpy(v).cuda()
+                data_batch[k] = torch.from_numpy(v).to(get_device())
 
             else:
                 print(f"Skipping key {k} of type {type(v)}")

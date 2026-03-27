@@ -3,7 +3,7 @@ import os
 import urllib
 import warnings
 from typing import Any, Union, List
-from pkg_resources import packaging
+from packaging import version as packaging_version
 
 import torch
 from PIL import Image
@@ -20,7 +20,7 @@ try:
 except ImportError:
     BICUBIC = Image.BICUBIC
 
-if packaging.version.parse(torch.__version__) < packaging.version.parse("1.7.1"):
+if packaging_version.parse(torch.__version__) < packaging_version.parse("1.7.1"):
     warnings.warn("PyTorch version 1.7.1 or higher is recommended")
 
 __all__ = ["available_models", "load", "tokenize"]
@@ -117,7 +117,7 @@ TORCH_HUB_ROOT = os.path.expandvars(os.getenv("$TORCH_HUB_ROOT", "$HOME/.torch_h
 
 def load(
     name: str,
-    device: Union[str, torch.device] = "cuda" if torch.cuda.is_available() else "cpu",
+    device: Union[str, torch.device] = None,
     jit: bool = False,
     download_root: str = None,
 ):
@@ -145,6 +145,10 @@ def load(
     preprocess : Callable[[PIL.Image], torch.Tensor]
         A torchvision transform that converts a PIL image into a tensor that the returned model can take as its input
     """
+    if device is None:
+        from vidbot_utils.device import get_device
+        device = get_device()
+
     if name in _MODELS:
         model_path = _download(_MODELS[name], download_root or TORCH_HUB_ROOT)
     elif os.path.isfile(name):
@@ -270,7 +274,7 @@ def tokenize(
     sot_token = _tokenizer.encoder["<|startoftext|>"]
     eot_token = _tokenizer.encoder["<|endoftext|>"]
     all_tokens = [[sot_token] + _tokenizer.encode(text) + [eot_token] for text in texts]
-    if packaging.version.parse(torch.__version__) < packaging.version.parse("1.8.0"):
+    if packaging_version.parse(torch.__version__) < packaging_version.parse("1.8.0"):
         result = torch.zeros(len(all_tokens), context_length, dtype=torch.long)
     else:
         result = torch.zeros(len(all_tokens), context_length, dtype=torch.int)

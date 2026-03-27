@@ -4,7 +4,7 @@ import copy
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.nn.functional as F
 import diffuser_utils.dataset_utils as DatasetUtils
 from models.diffuser import DiffuserModel
@@ -31,7 +31,7 @@ class TrajectoryDiffusionModule(pl.LightningModule):
             clip_model,
             [data_batch["action_text"]],
             max_length=max_length,
-            device="cuda",
+            device=self.device,
         )
 
         action_tokens.to(self.device)
@@ -49,7 +49,7 @@ class TrajectoryDiffusionModule(pl.LightningModule):
             clip_model,
             verb_text,
             max_length=max_length,
-            device="cuda",
+            device=self.device,
         )
 
         verb_tokens.to(self.device)

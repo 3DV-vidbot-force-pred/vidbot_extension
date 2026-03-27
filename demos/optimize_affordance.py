@@ -143,7 +143,8 @@ def run(colmap_results, data, device, visualize=True):
 
 if __name__ == "__main__":
     # Load the data and prepare the tensors
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    from vidbot_utils.device import get_device
+    device = get_device()
     colmap_results_fpath = "datasets/epickitchens_traj_demo/colmap.json"
     data_fpath = "datasets/epickitchens_traj_demo/observation.npz"
     colmap_results = load_json(colmap_results_fpath)

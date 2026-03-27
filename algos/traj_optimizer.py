@@ -2,9 +2,25 @@ import torch
 import torch.nn.functional as F
 from scipy.signal import savgol_filter
 from models.layers_2d import BackprojectDepth, Project3D
-from pytorch3d.transforms import rotation_6d_to_matrix, matrix_to_rotation_6d
 import numpy as np
 import cv2
+
+
+def rotation_6d_to_matrix(d6: torch.Tensor) -> torch.Tensor:
+    """Convert 6D rotation representation to 3x3 rotation matrix.
+    Based on Zhou et al., "On the Continuity of Rotation Representations in Neural Networks".
+    """
+    a1, a2 = d6[..., :3], d6[..., 3:]
+    b1 = F.normalize(a1, dim=-1)
+    b2 = a2 - (b1 * a2).sum(-1, keepdim=True) * b1
+    b2 = F.normalize(b2, dim=-1)
+    b3 = torch.cross(b1, b2, dim=-1)
+    return torch.stack((b1, b2, b3), dim=-2)
+
+
+def matrix_to_rotation_6d(matrix: torch.Tensor) -> torch.Tensor:
+    """Convert 3x3 rotation matrix to 6D rotation representation."""
+    return matrix[..., :2, :].clone().reshape(*matrix.shape[:-2], 6)
 
 class TrajectoryOptimizer:
     def __init__(
@@ -16,9 +32,12 @@ class TrajectoryOptimizer:
         num_iters_scale=10,
         num_iters_pose=100,
         warp_mode="points",
-        device="cuda",
+        device=None,
     ):
         self.height, self.width = resolution[0], resolution[1]
+        if device is None:
+            from vidbot_utils.device import get_device
+            device = get_device()
         self.device = device
         self.lr_scale_global = lr_scale_global
         self.lr_scale = lr_scale

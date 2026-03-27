@@ -25,4 +25,5 @@ inference_results/
 *.blend*
 manip_render/
 datasets
-pretrained_weights/
+pretrained_weights/.DS_Store
+.DS_Store

@@ -12,7 +12,10 @@ from math import ceil
 from models.clip import clip, tokenize
 
 
-def compute_null_text_embeddings(vlm, batch_size=1, device="cuda"):
+def compute_null_text_embeddings(vlm, batch_size=1, device=None):
+    if device is None:
+        from vidbot_utils.device import get_device
+        device = get_device()
     action_tokens_null = tokenize("")
     action_tokens_null = action_tokens_null.repeat(batch_size, 1)
     action_tokens_null = action_tokens_null.to(device)
@@ -214,13 +217,15 @@ class TSDFVolume:
 
         # Check GPU
         if self._use_gpu:
-            if torch.cuda.is_available():
+            from vidbot_utils.device import get_device
+            _dev = get_device()
+            if _dev.type != "cpu":
                 if self._verbose:
-                    print("# Using GPU mode")
-                self._device = torch.device("cuda:0")
+                    print(f"# Using {_dev.type.upper()} mode")
+                self._device = _dev
             else:
                 if self._verbose:
-                    print("# Not available CUDA device, using CPU mode")
+                    print("# No GPU available, using CPU mode")
                 self._device = torch.device("cpu")
         else:
             if self._verbose:
@@ -229,8 +234,8 @@ class TSDFVolume:
 
         # Coordinate origin of the volume, set as the min value of volume bounds
         self._vol_origin = torch.tensor(
-            self._vol_bounds[:, 0].copy(order="C"), device=self._device
-        ).float()
+            self._vol_bounds[:, 0].copy(order="C").astype(np.float32), device=self._device
+        )
 
         # Grid coordinates of voxels
         xx, yy, zz = torch.meshgrid(
@@ -245,7 +250,7 @@ class TSDFVolume:
             .T
         )
         if self._use_gpu:
-            self._vox_coords = self._vox_coords.cuda()
+            self._vox_coords = self._vox_coords.to(self._device)
 
         # World coordinates of voxel centers
         self._world_coords = self.vox2world(
@@ -551,13 +556,15 @@ class TSDFVolume2(TSDFVolume):
         self._use_gpu = use_gpu
         self._vol_bounds = vol_bounds
         if self._use_gpu:
-            if torch.cuda.is_available():
+            from vidbot_utils.device import get_device
+            _dev = get_device()
+            if _dev.type != "cpu":
                 if self._verbose:
-                    print("# Using GPU mode")
-                self._device = torch.device("cuda:0")
+                    print(f"# Using {_dev.type.upper()} mode")
+                self._device = _dev
             else:
                 if self._verbose:
-                    print("# Not available CUDA device, using CPU mode")
+                    print("# No GPU available, using CPU mode")
                 self._device = torch.device("cpu")
         else:
             if self._verbose:
@@ -580,11 +587,9 @@ class TSDFVolume2(TSDFVolume):
             self._vol_bounds[:, 0] + self._vol_dim * self._voxel_size
         )
         self._vol_dim = self._vol_dim.tolist()
-        # self._vol_origin = self._vol_bounds[:, 0].copy(order="C").astype(np.float32)
-        # self._vol_dim = torch.tensor(self._vol_dim, device=self._device).int()
         self._vol_origin = torch.tensor(
-            self._vol_bounds[:, 0].copy(order="C"), device=self._device
-        ).float()
+            self._vol_bounds[:, 0].copy(order="C").astype(np.float32), device=self._device
+        )
         # Grid coordinates of voxels
         xx, yy, zz = torch.meshgrid(
             torch.arange(self._vol_dim[0]),
@@ -598,7 +603,7 @@ class TSDFVolume2(TSDFVolume):
             .T
         )
         if self._use_gpu:
-            self._vox_coords = self._vox_coords.cuda()
+            self._vox_coords = self._vox_coords.to(self._device)
 
         # World coordinates of voxel centers
         self._world_coords = self.vox2world(

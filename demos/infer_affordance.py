@@ -1,7 +1,7 @@
 import argparse
 import sys
 import os
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 from omegaconf import OmegaConf
 import torch
 import numpy as np
@@ -17,10 +17,11 @@ from copy import deepcopy
 from transformations import rotation_matrix
 
 # CLIP-based action text encoder
-VLM, VLM_TRANSFORM = clip.load("ViT-B/16", jit=False)
+from vidbot_utils.device import get_device
+DEVICE = get_device()
+VLM, VLM_TRANSFORM = clip.load("ViT-B/16", jit=False, device=DEVICE)
 VLM.float()
 VLM.eval()
-VLM.cuda()
 for p in VLM.parameters():
     p.requires_grad = False
 
@@ -70,12 +71,27 @@ def main(args):
     exclude_object_points = guidance_params["exclude_object_points"]
     print("Using guidance params: ", guidance_params)
 
-    # Read the data
-    depth_file_path = os.path.join(
-        dataset_path, "depth_m3d", "{:06d}.png".format(frame_id))
-    if not os.path.exists(depth_file_path):
-        depth_file_path = os.path.join(
-            dataset_path, "depth", "{:06d}.png".format(frame_id))
+    # Read the data — resolve depth source based on --depth_model preference
+    depth_search_order = {
+        "metric3d": ["depth_m3d", "depth", "depth_dav3"],
+        "dav3":     ["depth_dav3", "depth", "depth_m3d"],
+        "auto":     ["depth_m3d", "depth_dav3", "depth"],
+        "raw":      ["depth"],
+    }
+    search_dirs = depth_search_order.get(args.depth_model, ["depth_m3d", "depth_dav3", "depth"])
+    depth_file_path = None
+    for ddir in search_dirs:
+        candidate = os.path.join(dataset_path, ddir, "{:06d}.png".format(frame_id))
+        if os.path.exists(candidate):
+            depth_file_path = candidate
+            break
+    if depth_file_path is None:
+        print("No depth map found for frame {}. Searched: {}".format(
+            frame_id, ", ".join(search_dirs)))
+        print("Run  python scripts/estimate_depth.py -d {} -m {} --frames {}  first.".format(
+            args.dataset, args.depth_model if args.depth_model != "auto" else "dav3", frame_id))
+        return
+    print("Using depth: {}".format(depth_file_path))
 
     color_file_path = os.path.join(
         dataset_path, "color", "{:06d}.png".format(frame_id))
@@ -144,16 +160,16 @@ def main(args):
 
     for k, v in data_batch.items():
         if isinstance(v, torch.Tensor):
-            data_batch[k] = v.unsqueeze(0).cuda()
+            data_batch[k] = v.unsqueeze(0).to(DEVICE)
     _, null_embeddings = DatasetUtils.encode_text_clip(
-        VLM, [""], max_length=None, device="cuda"
+        VLM, [""], max_length=None, device=DEVICE
     )
-    data_batch["action_feature_null"] = null_embeddings.cuda()
+    data_batch["action_feature_null"] = null_embeddings.to(DEVICE)
     data_batch["action_text"] = args.instruction
     data_batch["gripper_points"] = torch.from_numpy(
         np.asarray(gripper_mesh.sample_points_uniformly(
             number_of_points=2048).points).astype(np.float32)
-    ).cuda()
+    ).to(DEVICE)
 
     # Run the open-vocabulary object detection
     meta_name = "{:06d}_{}.npz".format(
@@ -323,6 +339,9 @@ if __name__ == "__main__":
                         action="store_true", help="Skip the coarse stage, make sure to set --load_results to True")
     parser.add_argument("--skip_fine_stage",
                         action="store_true", help="Skip the fine stage, make sure to set --load_results to True")
+    parser.add_argument("--depth_model", type=str, default="auto",
+                        choices=["auto", "metric3d", "dav3", "raw"],
+                        help="Depth source: auto (prefer metric3d>dav3>raw), metric3d, dav3, or raw sensor depth")
     parser.add_argument("--use_graspnet", action="store_true",
                         help="Use the graspnet, use this if GraspNet is successfully installed, othewise we use a heuristic approach to acuqire the grasp pose")
     args = parser.parse_args()

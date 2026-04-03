@@ -383,6 +383,7 @@ class AffordanceInferenceEngine(pl.LightningModule):
                 channel=1,
                 interpolation=cv2.INTER_NEAREST,
             )[..., 0]
+            object_depth = DatasetUtils.densify_depth_np(object_depth, num_iters=4)
 
             center_offset = DatasetUtils.get_center_offset(
                 center, scale, self.context_image_shape[0], self.context_image_shape[1]

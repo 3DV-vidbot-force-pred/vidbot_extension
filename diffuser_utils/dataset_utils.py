@@ -1098,3 +1098,43 @@ def smooth_rotation_matrices(rotation_matrices, smooth_factor=0.1):
         [rotation_matrices[:1], smoothed_rotation_matrices], axis=0
     )
     return smoothed_rotation_matrices
+
+
+def densify_depth_np(depth, num_iters=4):
+    """Numpy version: fill zero holes with local 3x3 neighbor means."""
+    depth_np = np.asarray(depth)
+    squeeze_batch = False
+    if depth_np.ndim == 2:
+        depth_np = depth_np[None, ...]
+        squeeze_batch = True
+    elif depth_np.ndim != 3:
+        raise ValueError("depth must be HxW or BxHxW")
+
+    dense = depth_np.astype(np.float32, copy=True)
+
+    for _ in range(num_iters):
+        valid = dense > 0
+        valid_f = valid.astype(np.float32)
+
+        sum_neighbors = np.zeros_like(dense, dtype=np.float32)
+        cnt_neighbors = np.zeros_like(dense, dtype=np.float32)
+
+        val_pad = np.pad(dense * valid_f, ((0, 0), (1, 1), (1, 1)), mode="constant")
+        msk_pad = np.pad(valid_f, ((0, 0), (1, 1), (1, 1)), mode="constant")
+
+        for dy in range(3):
+            for dx in range(3):
+                sum_neighbors += val_pad[
+                    :, dy : dy + dense.shape[1], dx : dx + dense.shape[2]
+                ]
+                cnt_neighbors += msk_pad[
+                    :, dy : dy + dense.shape[1], dx : dx + dense.shape[2]
+                ]
+
+        mean_neighbors = sum_neighbors / np.clip(cnt_neighbors, 1e-6, None)
+        fill_mask = (~valid) & (cnt_neighbors > 0)
+        dense[fill_mask] = mean_neighbors[fill_mask]
+
+    if squeeze_batch:
+        dense = dense[0]
+    return dense

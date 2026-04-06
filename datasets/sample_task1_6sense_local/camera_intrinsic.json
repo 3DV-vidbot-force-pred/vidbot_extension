@@ -1,0 +1,16 @@
+{
+  "intrinsic_matrix": [
+    588.965576171875,
+    0.0,
+    0.0,
+    0.0,
+    589.0369873046875,
+    0.0,
+    639.7569580078125,
+    358.6033020019531,
+    1.0
+  ],
+  "width": 1280,
+  "height": 720,
+  "note": "Generated from calibration video via scripts/estimate_instrinsics.py"
+}

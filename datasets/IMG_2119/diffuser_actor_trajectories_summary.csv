@@ -1,0 +1,3 @@
+dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
+IMG_2119,0,0,open the freezer,freezer,20,81,-0.380086,-0.026261,0.378988,-0.065066,0.155518,0.209038,0.412055,0.149283,diffuser_actor_prediction/000000_000000_open-the-freezer.npz
+IMG_2119,0,1,open the freezer,freezer,20,81,-0.015725,-0.08487,0.383589,-0.008677,0.107028,0.203338,0.274844,0.142695,diffuser_actor_prediction/000000_000001_open-the-freezer.npz

@@ -1,2 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_trajectories,n_timesteps,best_traj_idx,best_total_loss,best_goal_loss,best_collision_loss,best_normal_loss,all_trajs_file,best_traj_file
-IMG_1880,0,0,pull the chair closer,chair,40,81,19,0.110094,0.03259,0.064387,0.013116,trajectories/frame000000_obj000000_all_trajectories.npy,trajectories/frame000000_obj000000_best_trajectory.npy

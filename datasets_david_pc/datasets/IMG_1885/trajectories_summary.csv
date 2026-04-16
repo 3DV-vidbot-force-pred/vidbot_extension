@@ -1,3 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_trajectories,n_timesteps,best_traj_idx,best_total_loss,best_goal_loss,best_collision_loss,best_normal_loss,all_trajs_file,best_traj_file
-IMG_1885,0,0,press the enter key,enter key,40,81,17,0.190284,0.004395,0.165718,0.020171,trajectories/frame000000_obj000000_all_trajectories.npy,trajectories/frame000000_obj000000_best_trajectory.npy
-IMG_1885,0,1,press the enter key,enter key,40,81,22,0.202826,0.031222,0.150106,0.021498,trajectories/frame000000_obj000001_all_trajectories.npy,trajectories/frame000000_obj000001_best_trajectory.npy

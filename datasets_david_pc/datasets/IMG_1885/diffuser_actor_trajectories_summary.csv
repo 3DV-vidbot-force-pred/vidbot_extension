@@ -1,3 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
-IMG_1885,0,0,press the enter key,enter key,20,81,-0.050446,0.020887,0.36491,-0.011459,0.073924,0.314896,0.107091,0.057145,diffuser_actor_prediction/000000_000000_press-the-enter-key.npz
-IMG_1885,0,1,press the enter key,enter key,20,81,0.244347,0.04872,0.327114,0.26298,0.096067,0.28227,0.092471,0.080638,diffuser_actor_prediction/000000_000001_press-the-enter-key.npz

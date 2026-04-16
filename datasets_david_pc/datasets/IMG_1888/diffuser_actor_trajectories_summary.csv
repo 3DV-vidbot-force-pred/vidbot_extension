@@ -1,2 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
-IMG_1888,0,0,open the dishwasher,dishwasher,20,81,-0.255249,-0.1955,0.518284,-0.157241,-0.058228,0.443714,0.202957,0.08627,diffuser_actor_prediction/000000_000000_open-the-dishwasher.npz

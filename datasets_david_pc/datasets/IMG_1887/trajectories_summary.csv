@@ -1,7 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_trajectories,n_timesteps,best_traj_idx,best_total_loss,best_goal_loss,best_collision_loss,best_normal_loss,all_trajs_file,best_traj_file
-IMG_1887,0,0,open the cabinet,cabinet,40,81,23,0.118018,0.019797,0.084415,0.013806,trajectories/frame000000_obj000000_all_trajectories.npy,trajectories/frame000000_obj000000_best_trajectory.npy
-IMG_1887,0,1,open the cabinet,cabinet,40,81,28,0.1855,0.007094,0.107333,0.071074,trajectories/frame000000_obj000001_all_trajectories.npy,trajectories/frame000000_obj000001_best_trajectory.npy
-IMG_1887,0,2,open the cabinet,cabinet,40,81,3,0.15955,0.013469,0.129504,0.016578,trajectories/frame000000_obj000002_all_trajectories.npy,trajectories/frame000000_obj000002_best_trajectory.npy
-IMG_1887,0,3,open the cabinet,cabinet,40,81,17,0.174784,0.017179,0.139334,0.01827,trajectories/frame000000_obj000003_all_trajectories.npy,trajectories/frame000000_obj000003_best_trajectory.npy
-IMG_1887,0,4,open the cabinet,cabinet,40,81,16,0.228316,0.065566,0.134679,0.028071,trajectories/frame000000_obj000004_all_trajectories.npy,trajectories/frame000000_obj000004_best_trajectory.npy
-IMG_1887,0,5,open the cabinet,cabinet,40,81,6,0.102124,0.011046,0.069762,0.021316,trajectories/frame000000_obj000005_all_trajectories.npy,trajectories/frame000000_obj000005_best_trajectory.npy

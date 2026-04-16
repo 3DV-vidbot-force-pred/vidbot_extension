@@ -1,5 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
-IMG_1878,0,0,open the top drawer,top drawer,20,81,-0.080586,-0.003949,0.421828,0.017055,0.12481,0.331259,0.226114,0.155394,diffuser_actor_prediction/000000_000000_open-the-top-drawer.npz
-IMG_1878,0,1,open the top drawer,top drawer,20,81,-0.081879,0.07099,0.461099,0.071962,0.153405,0.374816,0.231616,0.127342,diffuser_actor_prediction/000000_000001_open-the-top-drawer.npz
-IMG_1878,0,2,open the top drawer,top drawer,20,81,-0.077417,0.025347,0.427848,0.014171,0.18593,0.343961,0.240302,0.099706,diffuser_actor_prediction/000000_000002_open-the-top-drawer.npz
-IMG_1878,0,3,open the top drawer,top drawer,20,81,-0.215708,0.066169,0.49479,-0.069296,0.197921,0.389484,0.252133,0.110432,diffuser_actor_prediction/000000_000003_open-the-top-drawer.npz

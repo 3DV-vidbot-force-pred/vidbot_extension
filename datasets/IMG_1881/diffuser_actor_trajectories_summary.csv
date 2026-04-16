@@ -1,0 +1,6 @@
+dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
+IMG_1881,0,0,open the door,door,20,81,-0.115876,-0.083396,0.357156,0.063614,0.06604,0.210769,0.304985,0.112385,diffuser_actor_prediction/000000_000000_open-the-door.npz
+IMG_1881,0,1,open the door,door,20,81,0.27146,-0.060378,0.357919,0.266896,0.089381,0.234082,0.240262,0.168677,diffuser_actor_prediction/000000_000001_open-the-door.npz
+IMG_1881,0,2,open the door,door,20,81,-0.031484,-0.109354,0.392742,0.073324,0.067949,0.243446,0.286156,0.12697,diffuser_actor_prediction/000000_000002_open-the-door.npz
+IMG_1881,0,3,open the door,door,20,81,0.119478,-0.096119,0.388076,0.160488,0.073096,0.231629,0.265635,0.128804,diffuser_actor_prediction/000000_000003_open-the-door.npz
+IMG_1881,0,4,open the door,door,20,81,-0.417245,-0.044275,0.377652,-0.17861,0.0524,0.231469,0.309901,0.164475,diffuser_actor_prediction/000000_000004_open-the-door.npz

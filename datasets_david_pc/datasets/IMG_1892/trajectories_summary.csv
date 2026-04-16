@@ -1,5 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_trajectories,n_timesteps,best_traj_idx,best_total_loss,best_goal_loss,best_collision_loss,best_normal_loss,all_trajs_file,best_traj_file
-IMG_1892,0,0,open the door,door,40,81,16,0.136613,0.019902,0.107627,0.009085,trajectories/frame000000_obj000000_all_trajectories.npy,trajectories/frame000000_obj000000_best_trajectory.npy
-IMG_1892,0,1,open the door,door,40,81,14,0.096743,0.008979,0.072762,0.015002,trajectories/frame000000_obj000001_all_trajectories.npy,trajectories/frame000000_obj000001_best_trajectory.npy
-IMG_1892,0,2,open the door,door,40,81,35,0.103049,0.025473,0.062995,0.014581,trajectories/frame000000_obj000002_all_trajectories.npy,trajectories/frame000000_obj000002_best_trajectory.npy
-IMG_1892,0,3,open the door,door,40,81,19,0.109967,0.033121,0.064264,0.012582,trajectories/frame000000_obj000003_all_trajectories.npy,trajectories/frame000000_obj000003_best_trajectory.npy

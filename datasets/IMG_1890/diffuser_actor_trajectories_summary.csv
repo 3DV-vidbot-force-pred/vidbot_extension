@@ -1,0 +1,3 @@
+dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
+IMG_1890,0,0,open the microwave,microwave,20,81,-0.035373,-0.01434,0.420308,-0.025217,0.037809,0.373549,0.143923,0.133047,diffuser_actor_prediction/000000_000000_open-the-microwave.npz
+IMG_1890,0,1,open the microwave,microwave,20,81,-0.04893,-0.012791,0.402553,0.045282,0.084731,0.337759,0.20658,0.167239,diffuser_actor_prediction/000000_000001_open-the-microwave.npz

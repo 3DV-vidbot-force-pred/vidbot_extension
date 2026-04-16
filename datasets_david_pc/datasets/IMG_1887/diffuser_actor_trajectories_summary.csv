@@ -1,7 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
-IMG_1887,0,0,open the cabinet,cabinet,20,81,0.239716,-0.046244,0.371933,0.223595,0.067771,0.268072,0.211244,0.178248,diffuser_actor_prediction/000000_000000_open-the-cabinet.npz
-IMG_1887,0,1,open the cabinet,cabinet,20,81,-0.265798,-0.082229,0.444095,-0.160286,0.002359,0.363723,0.207628,0.147704,diffuser_actor_prediction/000000_000001_open-the-cabinet.npz
-IMG_1887,0,2,open the cabinet,cabinet,20,81,-0.000751,-0.061571,0.405845,0.134002,0.069679,0.257001,0.264732,0.132664,diffuser_actor_prediction/000000_000002_open-the-cabinet.npz
-IMG_1887,0,3,open the cabinet,cabinet,20,81,-0.064234,-0.062989,0.402073,0.056216,0.046737,0.273554,0.252658,0.155889,diffuser_actor_prediction/000000_000003_open-the-cabinet.npz
-IMG_1887,0,4,open the cabinet,cabinet,20,81,-0.004056,-0.049188,0.393513,0.023846,-0.005977,0.294944,0.172078,0.150616,diffuser_actor_prediction/000000_000004_open-the-cabinet.npz
-IMG_1887,0,5,open the cabinet,cabinet,20,81,-0.271168,-0.086574,0.444381,-0.105023,-0.006789,0.363861,0.255352,0.150324,diffuser_actor_prediction/000000_000005_open-the-cabinet.npz

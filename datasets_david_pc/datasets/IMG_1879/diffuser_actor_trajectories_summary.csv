@@ -1,5 +1,0 @@
-dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
-IMG_1879,0,0,open the cabinet,cabinet,20,81,-0.142447,0.052312,0.336753,0.070586,0.096259,0.216902,0.273126,0.14214,diffuser_actor_prediction/000000_000000_open-the-cabinet.npz
-IMG_1879,0,1,open the cabinet,cabinet,20,81,-0.087788,0.049226,0.350518,-0.034571,0.12088,0.231198,0.173493,0.121757,diffuser_actor_prediction/000000_000001_open-the-cabinet.npz
-IMG_1879,0,2,open the cabinet,cabinet,20,81,-0.09573,-0.039662,0.359393,-0.030971,0.091856,0.209554,0.243324,0.149169,diffuser_actor_prediction/000000_000002_open-the-cabinet.npz
-IMG_1879,0,3,open the cabinet,cabinet,20,81,-0.092896,-0.030689,0.342366,0.075046,0.050108,0.225273,0.253415,0.144434,diffuser_actor_prediction/000000_000003_open-the-cabinet.npz

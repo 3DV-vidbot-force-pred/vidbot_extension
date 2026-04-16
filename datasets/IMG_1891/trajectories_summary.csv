@@ -1,0 +1,4 @@
+dataset,frame_id,object_idx,instruction,object_label,n_trajectories,n_timesteps,best_traj_idx,best_total_loss,best_goal_loss,best_collision_loss,best_normal_loss,all_trajs_file,best_traj_file
+IMG_1891,0,0,turn the oven dial to 6,oven dial,40,81,28,0.082682,0.015794,0.054665,0.012223,trajectories/frame000000_obj000000_all_trajectories.npy,trajectories/frame000000_obj000000_best_trajectory.npy
+IMG_1891,0,1,turn the oven dial to 6,oven dial,40,81,39,0.177317,0.024272,0.036353,0.116693,trajectories/frame000000_obj000001_all_trajectories.npy,trajectories/frame000000_obj000001_best_trajectory.npy
+IMG_1891,0,2,turn the oven dial to 6,oven dial,40,81,12,0.091978,0.013063,0.061626,0.017289,trajectories/frame000000_obj000002_all_trajectories.npy,trajectories/frame000000_obj000002_best_trajectory.npy

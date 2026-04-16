@@ -1,0 +1,5 @@
+dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
+IMG_1884,0,0,open the closer,closer,20,81,-0.130268,-0.050088,0.409645,-0.077235,-0.033632,0.383939,0.088384,0.092065,diffuser_actor_prediction/000000_000000_open-the-closer.npz
+IMG_1884,0,1,open the closer,closer,20,81,0.334688,0.172537,0.481428,0.366183,0.16093,0.484598,0.058675,0.085107,diffuser_actor_prediction/000000_000001_open-the-closer.npz
+IMG_1884,0,2,open the closer,closer,20,81,0.300622,0.235786,0.471822,0.345406,0.243297,0.466135,0.071856,0.062459,diffuser_actor_prediction/000000_000002_open-the-closer.npz
+IMG_1884,0,3,open the closer,closer,20,81,-0.011245,-0.037021,0.389147,0.053809,-0.061484,0.401529,0.08397,0.078181,diffuser_actor_prediction/000000_000003_open-the-closer.npz

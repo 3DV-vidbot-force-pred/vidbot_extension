@@ -16,6 +16,3 @@
 [submodule "third_party/DepthAnythingV3"]
 	path = third_party/DepthAnythingV3
 	url = https://github.com/ByteDance-Seed/depth-anything-3.git
-[submodule "6sense"]
-	path = 6sense
-	url = https://github.com/MatteoWohlrapp/6sense.git

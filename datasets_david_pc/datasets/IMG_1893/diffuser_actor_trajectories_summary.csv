@@ -1,0 +1,2 @@
+dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
+IMG_1893,0,0,turn on the lamp,lamp,20,81,-0.071733,-0.098729,0.428443,0.006995,0.057938,0.296421,0.243274,0.060511,diffuser_actor_prediction/000000_000000_turn-on-the-lamp.npz

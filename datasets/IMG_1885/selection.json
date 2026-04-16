@@ -1,0 +1,19 @@
+{
+  "video": "IMG_1885",
+  "instruction": "press the enter key",
+  "object": "enter key",
+  "author": "david",
+  "calibration": "1.0",
+  "calibration_source": "/Users/davidkorcak/Desktop/dataset/IMG_2114/calibration.json",
+  "calibration_rms": 0.44089581318667803,
+  "twist": 0,
+  "force_level": 0,
+  "source_video_dir": "/Users/davidkorcak/Desktop/dataset/IMG_1885",
+  "source_frame_path": "/Users/davidkorcak/Desktop/dataset/IMG_1885/000001.png",
+  "source_frame_idx": 0,
+  "frame_idx_from_sheet": 0,
+  "num_source_frames": 111,
+  "frame_width": 1920,
+  "frame_height": 1080,
+  "prepared_color_frame": "/Users/davidkorcak/Documents/eth/sem2/vidbot_extension/datasets/IMG_1885/color/000000.png"
+}

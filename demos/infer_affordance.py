@@ -99,7 +99,7 @@ def main(args):
         color_file_path = color_file_path.replace(".png", ".jpg")
     depth = cv2.imread(depth_file_path, -1)
     depth = depth / 1000.0
-    color = cv2.imread(color_file_path, -1)[..., [2, 1, 0]].copy()
+    color = cv2.imread(color_file_path, cv2.IMREAD_COLOR)[..., [2, 1, 0]].copy()
     depth[depth > 2] = 0
     data_batch = DatasetUtils.get_context_data_from_rgbd(
         color,

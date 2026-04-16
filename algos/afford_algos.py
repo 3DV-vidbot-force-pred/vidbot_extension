@@ -1097,10 +1097,10 @@ class AffordanceInferenceEngine(pl.LightningModule):
                 to_write[k] = v.astype(np.float32)
             elif isinstance(v, str):
                 k += "_singlestr"
-                to_write[k] = DatasetUtils.encode_text_list([v])
-            elif isinstance(v, list) and isinstance(v[0], str):
+                to_write[k] = np.array(DatasetUtils.encode_text_list([v]), dtype=object)
+            elif isinstance(v, list) and len(v) > 0 and isinstance(v[0], str):
                 k += "_strlist"
-                to_write[k] = DatasetUtils.encode_text_list(v)
+                to_write[k] = np.array(DatasetUtils.encode_text_list(v), dtype=object)
             elif isinstance(v, o3d.geometry.TriangleMesh):
                 mesh_vertices = np.array(v.vertices).astype(np.float32)
                 mesh_faces = np.array(v.triangles).astype(np.float32)

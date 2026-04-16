@@ -1,0 +1,2 @@
+dataset,frame_id,object_idx,instruction,object_label,n_trajectories,n_timesteps,best_traj_idx,best_total_loss,best_goal_loss,best_collision_loss,best_normal_loss,all_trajs_file,best_traj_file
+IMG_1888,0,0,open the dishwasher,dishwasher,40,81,11,0.117405,0.032466,0.0,0.084939,trajectories/frame000000_obj000000_all_trajectories.npy,trajectories/frame000000_obj000000_best_trajectory.npy

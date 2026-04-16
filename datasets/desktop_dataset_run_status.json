@@ -1,0 +1,20 @@
+[
+  {
+    "video": "IMG_2118",
+    "instruction": "pull the cabinet open",
+    "object": "pull the cabinet open",
+    "depth": "ok",
+    "vidbot": "ok",
+    "viz_pipeline": "ok",
+    "viz_results": "ok"
+  },
+  {
+    "video": "IMG_2119",
+    "instruction": "open the freezer",
+    "object": "freezer",
+    "depth": "ok",
+    "vidbot": "ok",
+    "viz_pipeline": "ok",
+    "viz_results": "ok"
+  }
+]

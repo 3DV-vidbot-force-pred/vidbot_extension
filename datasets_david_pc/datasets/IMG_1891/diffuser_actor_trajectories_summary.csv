@@ -1,0 +1,4 @@
+dataset,frame_id,object_idx,instruction,object_label,n_samples,n_timesteps,mean_start_x,mean_start_y,mean_start_z,mean_end_x,mean_end_y,mean_end_z,mean_arc_length_m,sample_diversity_m,all_trajs_file
+IMG_1891,0,0,turn the oven dial to 6,oven dial,20,81,0.089678,-0.009881,0.364276,0.101863,-0.024334,0.336223,0.061028,0.071935,diffuser_actor_prediction/000000_000000_turn-the-oven-dial-to-6.npz
+IMG_1891,0,1,turn the oven dial to 6,oven dial,20,81,0.08076,0.051207,0.364356,0.0965,0.040389,0.354126,0.083547,0.067894,diffuser_actor_prediction/000000_000001_turn-the-oven-dial-to-6.npz
+IMG_1891,0,2,turn the oven dial to 6,oven dial,20,81,0.211773,-0.026071,0.351296,0.24834,-0.047848,0.351292,0.062206,0.054531,diffuser_actor_prediction/000000_000002_turn-the-oven-dial-to-6.npz
